@@ -5,7 +5,7 @@ from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk, ImageSequence
 
-current_path = os.getcwd()+"\\giphy.gif"
+
 
 
 
@@ -17,6 +17,7 @@ def get_latest_download_path():
     latest_pdf_file = max(list_of_pdf_files, key=os.path.getctime)
     return latest_pdf_file
 
+
 def generate_unique_filename(directory, base_name, extension, number_of_pages):
     file_name = f"{base_name}_Seiten_{number_of_pages}{extension}"
     final_path = os.path.join(directory, file_name)
@@ -26,6 +27,7 @@ def generate_unique_filename(directory, base_name, extension, number_of_pages):
         final_path = os.path.join(directory, file_name)
         counter += 1
     return file_name
+
 
 def extract_and_save_pdf(source_path):
     target_path = locationEntry.get()
@@ -57,18 +59,17 @@ def extract_and_save_pdf(source_path):
     print(f"PDF erfolgreich gespeichert unter: {final_path}")
 
 
-    
-
 root = tk.Tk()
 root.geometry("700x230")  # Adjust the size as needed to fit the GIF and entries
 root.attributes("-topmost", -1)
 root.title("Speichern der Dokumente von Kevin Fritsch")
-
 frameCnt = 12
 new_height = 200  # New height for the GIF
 frames = []
-
+current_path = os.getcwd()+"\\giphy.gif"
 gif_path = current_path
+
+
 with Image.open(gif_path) as img:
     for i, frame in enumerate(ImageSequence.Iterator(img)):
         # Calculate new width to maintain aspect ratio
@@ -86,6 +87,7 @@ with Image.open(gif_path) as img:
         if i + 1 == frameCnt:
             break
 
+
 def update(ind):
     frame = frames[ind]
     ind += 1
@@ -94,37 +96,29 @@ def update(ind):
     label.configure(image=frame)
     root.after(100, update, ind)
 
+
 label = Label(root)
 label.grid(row=1, column=6, rowspan=8, padx=(50, 0)) 
 root.after(0, update, 0)
-
-
 # Erstellen des ersten Eintragsfeldes mit Beschriftung
 locationLabel = tk.Label(root, text="Wo es gespeichert werden soll")
 locationLabel.grid(row=3, column=1, sticky="e")
 locationEntry = tk.Entry(root)
 locationEntry.grid(row=3, column=2, pady=(10, 0))  # Hinzufügen von Abstand oben
-
 # Erstellen des zweiten Eintragsfeldes mit Beschriftung
 firstPageLabel = tk.Label(root, text="Erste Seite")
 firstPageLabel.grid(row=4, column=1, sticky="e")
 firstPage = tk.Entry(root)
 firstPage.grid(row=4, column=2, pady=5)  # Hinzufügen von Abstand oben und unten
-
 # Erstellen des dritten Eintragsfeldes mit Beschriftung
 secondPageLabel = tk.Label(root, text="Letzte Seite")
 secondPageLabel.grid(row=5, column=1, sticky="e")
 secondPage = tk.Entry(root)
 secondPage.grid(row=5, column=2, pady=(0, 10))  # Hinzufügen von Abstand unten
-
 baseNameLabel = tk.Label(root, text="Name des Dokumentes")
 baseNameLabel.grid(row=6, column=1, sticky="e")
 baseName = tk.Entry(root)
 baseName.grid(row=6, column=2, pady=(0, 10))  # Hinzufügen von Abstand unten
-
-
-
-
 takeInput = tk.Button(root, text="Eingaben übernehmen", command=lambda: extract_and_save_pdf(get_latest_download_path()))
 takeInput.grid()
 
